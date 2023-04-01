@@ -10,7 +10,7 @@ function App() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('/api/todos').then(res => {
+    axios.get('https://listapi-id7r.onrender.com/api/todos').then(res => {
       setTodos(res.data);
     }).catch(err => {
       setError('Error fetching todos');
@@ -20,7 +20,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/todos', {
+      const res = await axios.post('https://listapi-id7r.onrender.com/api/todos', {
         _id: new mongoose.Types.ObjectId().toString(),
         title: title,
         completed: false
@@ -40,7 +40,7 @@ function App() {
     items.splice(result.destination.index, 0, reorderedItem);
     setTodos(items);
     try {
-      await axios.put(`/api/todos/${reorderedItem._id}`, {
+      await axios.put(`https://listapi-id7r.onrender.com/api/todos/${reorderedItem._id}`, {
         ...reorderedItem,
         order: result.destination.index
       });
@@ -56,7 +56,7 @@ function App() {
     todo.completed = !completed;
     setTodos(newTodos);
     try {
-      await axios.put(`/api/todos/${id}`, {
+      await axios.put(`https://listapi-id7r.onrender.com/api/todos/${id}`, {
         ...todo,
         completed: todo.completed
       });
@@ -74,35 +74,35 @@ function App() {
       </form>
       {error && <div className="app__error">{error}</div>}
       <DragDropContext onDragEnd={handleDragEnd}>
-  <Droppable droppableId="todos">
-    {(provided) => (
-      <ul className="app__list" ref={provided.innerRef} {...provided.droppableProps}>
-        {todos.map((todo, index) => (
-          <Draggable key={todo._id} draggableId={todo._id} index={index}>
-            {(provided) => (
-              <li
-                className={`app__item ${todo.completed ? 'app__item--completed' : ''}`}
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-              >
-                <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  onChange={() => handleToggleComplete(todo._id, todo.completed)}
-                />
-                <span className={todo.completed ? 'app__text--completed' : 'app__text'}>
-                  {todo.title}
-                </span>
-              </li>
-            )}
-          </Draggable>
-        ))}
-        {provided.placeholder}
-      </ul>
-    )}
-  </Droppable>
-</DragDropContext>
+        <Droppable droppableId="todos">
+          {(provided) => (
+            <ul className="app__list" ref={provided.innerRef} {...provided.droppableProps}>
+              {todos.map((todo, index) => (
+                <Draggable key={todo._id} draggableId={todo._id} index={index}>
+                  {(provided) => (
+                    <li
+                      className={`app__item ${todo.completed ? 'app__item--completed' : ''}`}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={todo.completed}
+                        onChange={() => handleToggleComplete(todo._id, todo.completed)}
+                      />
+                      <span className={todo.completed ? 'app__text--completed' : 'app__text'}>
+                        {todo.title}
+                      </span>
+                    </li>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ul>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 }
